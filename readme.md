@@ -6,3 +6,8 @@
 ```shell
 pip3 install pymongo
 ```
+
+### 运行
+```shell
+nohub python3 -u mongodump.py -s "mongodb://source" -d "mongodb://dest" > log.txt &
+```
