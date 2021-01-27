@@ -109,11 +109,13 @@ def dump():
         os.mkdir(dpath)
 
     print('正在将数据备份至本地...')
-    os.system(f'mongodump --uri={source} --out={dpath} --forceTableScan && mongorestore --uri={dest} --dir={dpath}')
+    os.system(f'mongodump --uri="{source}" --out={dpath} --forceTableScan && mongorestore --uri="{dest}" --dir={dpath}')
+
+
+def updateColections():
     while True:
         toDest()
         time.sleep(3)
-
 
 def toDest():
     for next in db2.backup.find(no_cursor_timeout=True):
@@ -131,6 +133,6 @@ def toDest():
 
 if __name__ == "__main__":
     run()
-    t = threading.Thread(target=dump)
-    t.start()
+    dump()
+    updateColections()
     print(source, dest)
