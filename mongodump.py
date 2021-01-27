@@ -8,7 +8,7 @@ import datetime
 import optparse
 
 
-usage = "python %prog -s/--user <source url> -d/--dest <dest url>"
+usage = "python %prog -s/--source <source url> -d/--dest <dest url>"
 parser = optparse.OptionParser(usage)  # 写入上面定义的帮助信息
 parser.add_option('-s', '--source', dest='source', type='string',
                   help='源地址')
@@ -104,14 +104,12 @@ def run():
 
 def dump():
     import os
-    if not os.path.exists('./bak'):
-        os.mkdir('./bak')
+    dpath = "dump"
+    if not os.path.exists(dpath):
+        os.mkdir(dpath)
 
     print('正在将数据备份至本地...')
-    os.system(
-        f'mongodump --uri={source} --out=./bak --forceTableScan')
-    print('备份至dest...')
-    os.system(f'mongorestore --uri={dest} --dir=./bak')
+    os.system(f'mongodump --uri={source} --out={dpath} --forceTableScan && mongorestore --uri={dest} --dir={dpath}')
     while True:
         toDest()
         time.sleep(3)
@@ -132,7 +130,7 @@ def toDest():
 
 
 if __name__ == "__main__":
+    run()
     t = threading.Thread(target=dump)
     t.start()
-    run()
     print(source, dest)
